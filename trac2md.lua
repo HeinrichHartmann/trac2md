@@ -19,16 +19,13 @@ end
 
 local link_wiki2md = function(t)
   t = unescape(t)
-
   -- fix links to match wiki renames
   t = t:gsub(" ","_")
   t = t:gsub(":","_")
   t = t:gsub("'","")
-
   if link_root then
     t = t:gsub("^" .. link_root, "")
   end
-
   -- stash fragment
   local path, sep, fragment = t:rpartition("#")
   t = "/" .. path .. '.md'
@@ -36,7 +33,6 @@ local link_wiki2md = function(t)
   if #fragment > 0 then
     t = t .. "#" .. fragment
   end
-
   return t
 end
 
@@ -106,9 +102,7 @@ local EOL          = L.P[[\n]] + L.P"\n" + EOS
 local BOL          = L.P"\n" -- + start of string?
 local char         = L.P(1)
 local text         = (L.R("az","AZ","09") + L.P' ')^1
-
 local image        = L.P'[[Image(' * L.Cg((1 - L.P')')^1) * L.P')]]' / mk.image
-
 local link_target  = (1 - L.S" ]")^1
 local link_caption = (1 - L.P"]")^0 -- can be empty
 local link         = L.P'[' * L.Cg(link_target) * L.Cg(link_caption) * L.P']'              / mk.link
@@ -124,26 +118,21 @@ local style        = L.P {
   mono1 = L.P'{{{' * L.Cg((           L.P"!}}}" + 1 - L.P'}}}')^0) * L.P'}}}' / '`%1`',
   mono2 = L.P'`'   * L.Cg((           L.P"!`"   + 1 - L.P'`')^0)   * L.P'`'   / '`%1`',
 }
-
 local misc_br      = L.Cg(L.P'[[BR]]' + L.P'[[br]]') / '  \n'
 local misc_excl    = L.P'!' * L.Cg(alpha + L.P'{') / '%1'
 local misc         = misc_br + misc_excl
 local format       = misc + image + link + quote + pre + style
-
 local tabl_rowc    = L.Cs((format + (1 - (L.P'||' * EOL)))^0)
 local tabl_row     = L.P'||' * L.Cg(tabl_rowc) * L.P'||' * EOL
 local tabl         = (EOL * EOL + L.Cc'\n') * (tabl_row / mk.tablhead) * (tabl_row / mk.tablrow)^0
-
 local hcont        = L.Cg(L.Cs((format + (1 - L.P"="))^1)) / mk.head
 local h1           = L.P"\n="    * space * L.Cg(hcont) * L.P"="     / '\n\n# %1'
 local h2           = L.P"\n=="   * space * L.Cg(hcont) * L.P"=="    / '\n\n## %1'
 local h3           = L.P"\n==="  * space * L.Cg(hcont) * L.P"==="   / '\n\n### %1'
 local h4           = L.P"\n====" * space * L.Cg(hcont) * L.P"===="  / '\n\n#### %1'
 local head         = h4 + h3 + h2 + h1
-
 local list_defn    = EOL * space * L.Cg((alpha + L.S'/ .(),')^1) * L.P'::' / '\n* **%1** '
 local list         = list_defn
-
 local item         = head + tabl + list + format + text + char
 local G            = L.Cs(item^0) * EOS
 
