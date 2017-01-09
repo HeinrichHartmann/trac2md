@@ -22,7 +22,7 @@ local link_wiki2md = function(t)
   -- fix links to match wiki renames
   t = t:gsub(" ","_")
   t = t:gsub(":","_")
-  t = t:gsub("'","")
+  t = t:gsub("'","_")
   if link_root then
     t = t:gsub("^" .. link_root, "")
   end
@@ -108,8 +108,7 @@ local link_caption = (1 - L.P"]")^0 -- can be empty
 local link         = L.P'[' * L.Cg(link_target) * L.Cg(link_caption) * L.P']'              / mk.link
 local pre_mark     = (L.P'#!' * (alpha+num)^1 * EOL)^-1
 local pre_content  = (1 - L.P'}}}')^0
-local pre          = L.P"{{{" *space * EOL * L.Cg(pre_mark) * L.Cg(pre_content) * L.P"}}}" / mk.pre
-local quote        = EOL * L.P"  " * L.Cg((1 - EOL)^0) / '    %1'
+local pre          = L.P"{{{" * space * EOL * L.Cg(pre_mark) * L.Cg(pre_content) * L.P"}}}" / mk.pre
 local style        = L.P {
   "sty",
   sty  = L.Cs(L.V'mono1' + L.V'mono2' + L.V'bold' + L.V'it'),
@@ -118,10 +117,10 @@ local style        = L.P {
   mono1 = L.P'{{{' * L.Cg((           L.P"!}}}" + 1 - L.P'}}}')^0) * L.P'}}}' / '`%1`',
   mono2 = L.P'`'   * L.Cg((           L.P"!`"   + 1 - L.P'`')^0)   * L.P'`'   / '`%1`',
 }
-local misc_br      = L.Cg(L.P'[[BR]]' + L.P'[[br]]') / '  \n'
+local misc_br      = L.Cg(L.P'[[BR]]' + L.P'[[br]]') * EOL^-1 / '  \n'
 local misc_excl    = L.P'!' * L.Cg(alpha + L.P'{') / '%1'
 local misc         = misc_br + misc_excl
-local format       = misc + image + link + quote + pre + style
+local format       = misc + image + link + pre + style
 local tabl_rowc    = L.Cs((format + (1 - (L.P'||' * EOL)))^0)
 local tabl_row     = L.P'||' * L.Cg(tabl_rowc) * L.P'||' * EOL
 local tabl         = (EOL * EOL + L.Cc'\n') * (tabl_row / mk.tablhead) * (tabl_row / mk.tablrow)^0
