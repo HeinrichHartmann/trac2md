@@ -2,7 +2,8 @@
 
 mtrack has a built in small and powerful wiki rendering engine. This wiki engine implements an ever growing subset of the commands from other popular Wikis, especially MoinMoin.
 This page demonstrates the formatting syntax available anywhere WikiFormatting is allowed.
-Font Styles #
+
+= Font Styles =
 
 The Trac wiki supports the following font styles:
 
