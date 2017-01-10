@@ -12,6 +12,10 @@ Conversion tool for Wiki Syntax from trac/moinmoin to markdown
 - lpeg
 - penlight
 
+## Example
+
+See [test.md](/test.md) which has been created from [test.wiki](/test.wiki).
+
 ## Parameters
 
 The following environment variables are considered:
