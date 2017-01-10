@@ -48,10 +48,19 @@ Line 2
 
 The wiki supports both ordered/numbered and unordered lists.
 Example:
- * Item 1     * Item 1.1        * Item 1.1.1           * Item 1.1.2        * Item 1.1.3     * Item 1.2
+ * Item 1
+   * Item 1.1
+      * Item 1.1.1   
+      * Item 1.1.2
+      * Item 1.1.3
+   * Item 1.2
  * Item 2
 
- 1. Item 1     a. Item 1.a     a. Item 1.b        i. Item 1.b.i        i. Item 1.b.ii
+ 1. Item 1
+   a. Item 1.a
+   a. Item 1.b
+      i. Item 1.b.i
+      i. Item 1.b.ii
  1. Item 2
 And numbered lists can also be given an explicit number:
  3. Item 3
@@ -59,8 +68,11 @@ And numbered lists can also be given an explicit number:
 The wiki also supports definition lists.
 Example:
 
-* **llama**      some kind of mammal, with hair
-* **ppython**      some kind of reptile, without hair     (can you spot the typo?)
+* **llama** 
+   some kind of mammal, with hair
+* **ppython** 
+   some kind of reptile, without hair
+   (can you spot the typo?)
 
 
 
@@ -79,7 +91,8 @@ Example:
 
 In order to mark a paragraph as blockquote, indent that paragraph with two spaces.
 Example:
-    This text is a quote from someone else.
+
+  This text is a quote from someone else.
 
 
 # Discussion Citations
@@ -107,7 +120,8 @@ Simple tables can be created like this:
 Hyperlinks are automatically created for WikiPageNames and URLs. WikiPageLinks can be disabled by prepending an exclamation mark "!" character, such as WikiPageLinkWikiPageLink}}}.
 
 Example:
-    TitleIndex, http://www.edgewall.com/, !NotAlink
+
+  TitleIndex, http://www.edgewall.com/, NotAlink
 
 Links can be given a more descriptive title by writing the link
 followed by a space and a title and all this inside square
