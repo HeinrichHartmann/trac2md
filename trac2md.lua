@@ -112,10 +112,10 @@ local pre          = L.P"{{{" * space * EOL * L.Cg(pre_mark) * L.Cg(pre_content)
 local style        = L.P {
   "sty",
   sty  = L.Cs(L.V'mono1' + L.V'mono2' + L.V'bold' + L.V'it'),
-  it   = L.P"''"   * L.Cg((L.V'sty' + L.P"''"   + 1 - L.P"''")^0)  * L.P"''"  / '*%1*',
-  bold = L.P"'''"  * L.Cg((L.V'sty' + L.P"!'''" + 1 - L.P"'''")^0) * L.P"'''" / '**%1**',
-  mono1 = L.P'{{{' * L.Cg((           L.P"!}}}" + 1 - L.P'}}}')^0) * L.P'}}}' / '`%1`',
-  mono2 = L.P'`'   * L.Cg((           L.P"!`"   + 1 - L.P'`')^0)   * L.P'`'   / '`%1`',
+  it   = L.P"''"   * L.Cg((L.V'sty' + L.P"''"   + 1 - L.P"''"  - EOL)^0) * L.P"''"  / '*%1*',
+  bold = L.P"'''"  * L.Cg((L.V'sty' + L.P"!'''" + 1 - L.P"'''" - EOL)^0) * L.P"'''" / '**%1**',
+  mono1 = L.P'{{{' * L.Cg((           L.P"!}}}" + 1 - L.P'}}}' - EOL)^0) * L.P'}}}' / '`%1`',
+  mono2 = L.P'`'   * L.Cg((           L.P"!`"   + 1 - L.P'`'   - EOL)^0) * L.P'`'   / '`%1`',
 }
 local misc_br      = L.Cg(L.P'[[BR]]' + L.P'[[br]]') * EOL^-1 / '  \n'
 local misc_excl    = L.P'!' * L.Cg(alpha + L.P'{') / '%1'
