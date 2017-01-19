@@ -9,6 +9,7 @@ require "pl.strict"
 
 local link_root = os.getenv("LINK_ROOT")
 local trac_root = os.getenv("TRAC_ROOT")
+local add_h_ids = (arg[1] == "-add-h-ids")
 
 local hex_to_char = function(x)
   return string.char(tonumber(x, 16))
@@ -36,7 +37,24 @@ local link_wiki2md = function(t)
   return t
 end
 
+local function mkh(pre,s)
+  local id = add_h_ids and ' {#' .. s:gsub('[^A-Za-z0-9]',"") .. '}' or ''
+  return '\n\n' .. pre .. s .. id
+end
+
 local mk = {
+  h1 = function(s)
+    return mkh("# ",s)
+  end,
+  h2 = function(s)
+    return mkh("## ",s)
+  end,
+  h3 = function(s)
+    return mkh("### ",s)
+  end,
+  h4 = function(s)
+    return mkh("#### ",s)
+  end,
   head = function(s)
     return s:rstrip()
   end,
@@ -125,10 +143,10 @@ local tabl_rowc    = L.Cs((format + (1 - (L.P'||' * EOL)))^0)
 local tabl_row     = L.P'||' * L.Cg(tabl_rowc) * L.P'||' * EOL
 local tabl         = (EOL * EOL + L.Cc'\n') * (tabl_row / mk.tablhead) * (tabl_row / mk.tablrow)^0
 local hcont        = L.Cg(L.Cs((format + (1 - L.P"="))^1)) / mk.head
-local h1           = L.P"\n="    * space * L.Cg(hcont) * L.P"="     / '\n\n# %1'
-local h2           = L.P"\n=="   * space * L.Cg(hcont) * L.P"=="    / '\n\n## %1'
-local h3           = L.P"\n==="  * space * L.Cg(hcont) * L.P"==="   / '\n\n### %1'
-local h4           = L.P"\n====" * space * L.Cg(hcont) * L.P"===="  / '\n\n#### %1'
+local h1           = L.P"\n="    * space * L.Cg(hcont) * L.P"="     / mk.h1
+local h2           = L.P"\n=="   * space * L.Cg(hcont) * L.P"=="    / mk.h2
+local h3           = L.P"\n==="  * space * L.Cg(hcont) * L.P"==="   / mk.h3
+local h4           = L.P"\n====" * space * L.Cg(hcont) * L.P"===="  / mk.h4
 local head         = h4 + h3 + h2 + h1
 local list_defn    = EOL * space * L.Cg((alpha + L.S'/ .(),')^1) * L.P'::' / '\n* **%1** '
 local list         = list_defn
