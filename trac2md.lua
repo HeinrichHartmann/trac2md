@@ -9,7 +9,7 @@ require "pl.strict"
 
 local link_root = os.getenv("LINK_ROOT")
 local trac_root = os.getenv("TRAC_ROOT")
-local add_h_ids = (arg[1] == "-add-h-ids")
+local add_h_ids = os.getenv("ADD_H_IDS")
 
 local hex_to_char = function(x)
   return string.char(tonumber(x, 16))
@@ -38,7 +38,14 @@ local link_wiki2md = function(t)
 end
 
 local function mkh(pre,s)
-  local id = add_h_ids and ' {#' .. s:gsub('[^A-Za-z0-9]',"") .. '}' or ''
+  local id
+  if add_h_ids == "1" then
+    id = ' {#' .. s:gsub('[^A-Za-z0-9]',"") .. '}'
+  elseif add_h_ids == "2" then
+    id = ' {#' .. s:gsub('[^A-Za-z0-9_.-]',"") .. '}'
+  else
+    id = ''
+  end
   return '\n\n' .. pre .. s .. id
 end
 
